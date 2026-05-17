@@ -1,0 +1,52 @@
+{% extends 'library/base.html' %}
+{% block title %}Sign In | LibSystem{% endblock %}
+{% block content %}
+<div class="auth-page-wrapper">
+    <div class="card auth-card shadow">
+        <div class="card-body p-4 p-sm-5">
+
+            {% if user.is_authenticated %}
+                <div class="text-center py-4">
+                    <div class="display-3 text-info mb-3">✓</div>
+                    <h4 class="auth-title mb-2">Session Active</h4>
+                    <p class="auth-subtitle mb-4">Logged in securely as <strong>{{ user.username }}</strong>.</p>
+                    {% if user.is_librarian %}
+                        <a href="{% url 'librarian_dashboard' %}" class="btn btn-auth-submit w-100 text-center d-block">Go to Librarian Console →</a>
+                    {% else %}
+                        <a href="{% url 'reader_dashboard' %}" class="btn btn-auth-submit w-100 text-center d-block">Go to Books Catalog →</a>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="text-center mb-4">
+                    <h3 class="auth-title mb-1">Welcome Back</h3>
+                    <p class="auth-subtitle">Sign in to access your digital library space</p>
+                </div>
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            <input type="{{ field.field.widget.input_type|default:'text' }}"
+                                   name="{{ field.html_name }}"
+                                   class="form-control {% if field.errors %}is-invalid{% endif %}"
+                                   id="{{ field.id_for_label }}"
+                                   placeholder="Enter your {{ field.label|lower }}..."
+                                   required>
+                            {% if field.errors %}
+                                <div class="invalid-feedback">{{ field.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-dark w-100 mt-3">Sign In</button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="text-dark small mb-0">New to the platform?&nbsp;&nbsp;<a href="{% url 'register' %}" class="text-dark fw-bold">Create account</a></p>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

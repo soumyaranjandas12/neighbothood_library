@@ -1,0 +1,211 @@
+/* static/css/custom.css */
+
+:root {
+    /* High-contrast dark techno neon background color palette */
+    --bg-dark: #0b0f19;
+    --neon-indigo: #4f46e5;
+    --neon-pink: #ec4899;
+    --glass-card-bg: rgba(255, 255, 255, 0.02);
+    --glass-card-border: rgba(255, 255, 255, 0.08);
+}
+
+/* THE ABSOLUTE BODY BACKGROUND FIX:
+   Applies a deep gradient background directly to the layout body frame
+   to guarantee standard canvas styling parameters are erased.
+*/
+body {
+    background: linear-gradient(90deg, #efd5ff 0%, #515ada 100%) !important;
+    min-height: 100vh;
+}
+
+/* Flex layout engine center align controller block */
+.auth-page-wrapper {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;      /* Vertically centers the card */
+    justify-content: center;  /* Horizontally centers the card */
+    background: transparent;
+    /*background: linear-gradient(135deg, rgba(9, 13, 22, 0.95) 0%, rgba(17, 24, 39, 0.95) 100%) !important;*/
+    padding: 16px;
+}
+
+/* COMPLETELY TRANSPARENT/FROSTED GLASS CARD PATTERN:
+   Forces background opacity to near-zero and adds hardware-accelerated blur filters.
+*/
+.auth-card {
+    background: transparent;
+    border: 1px solid !important;
+    border-radius: 20px !important;
+    /*backdrop-filter: blur(30px) saturate(200%) !important;*/
+    /*-webkit-backdrop-filter: blur(30px) saturate(200%) !important;*/
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+    width: 100%;
+    max-width: 360px;
+}
+
+/* Text Element Visibility Balancers */
+.auth-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: black !important;
+    background: black;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.auth-subtitle {
+    color: black !important;
+    font-size: 0.85rem;
+}
+
+.auth-card .form-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: black !important;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+/* Glass Input Controls */
+.auth-card .form-control,
+.auth-card .form-select {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+}
+
+.auth-card .form-control:focus,
+.auth-card .form-select:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+}
+
+/* Form Dropdown Options Element Browser Fix */
+.auth-card option {
+    background-color: #111827 !important;
+    color: #ffffff !important;
+}
+
+/* Premium Bright Gradient Button */
+.btn-auth-submit {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%) !important;
+    background-color: #4f46e5 !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.auth-card a.text-primary {
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+
+
+.text-muted {
+    color: black !important;
+    opacity: 0.5;
+}
+
+.form-text {
+    color: black !important;
+    opacity: 0.5;
+}
+
+.text-primary {
+
+    opacity: 1 !important;
+}
+
+/* --- Global Dashboard Enhancements --- */
+
+
+/* Metric Stats Cards */
+.stat-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+/* Premium Dashboard Lists & Containers */
+.dashboard-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.dashboard-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 20px;
+}
+
+/* Book Item Animation Cards */
+.transition-hover {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+}
+
+.transition-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Custom Utilities */
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.btn-xs {
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    border-radius: 6px;
+}
+
+/* Custom Card Hover and Status States mapping */
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+/* Elevates the item slightly and thickens shadows to signify an active click area */
+.transition-hover {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+}
+
+.transition-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -5px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Subtle extra-small font tuning helper */
+.extra-small {
+    font-size: 0.72rem !important;
+}

@@ -1,0 +1,170 @@
+{% extends 'library/base.html' %}
+{% block content %}
+
+<div class="container py-5">
+    <div class="text-center mb-5 py-4">
+        <h1 class="display-4 fw-extrabold text-dark mb-2">Welcome to Books Cafe</h1>
+        <p class="text-muted fs-5 mx-auto" style="max-width: 600px;">Access our global library archive catalogs, review community circulation metrics, and track your ongoing reader allocations seamlessly.</p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 p-3 border-0 shadow-sm rounded-4 cursor-pointer transition-hover bg-white text-dark"
+                 data-bs-toggle="collapse" 
+                 data-bs-target="#homeCatalogPanel" 
+                 style="cursor: pointer;">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <span class="display-6 mb-3 d-block">📚</span>
+                        <h4 class="fw-bold mb-1">Browse Books</h4>
+                        <p class="text-muted small mb-0">Explore our dynamic volumes, inspect summaries, and locate available copies instantly.</p>
+                    </div>
+                    <div class="text-end mt-4 pt-2 border-top border-dark">
+                        <span class="fs-2 fw-bold text-primary font-monospace">{{ paginator.count }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            {% if user.is_authenticated %}
+                <a href="{% if user.is_librarian %}{% url 'librarian_dashboard' %}{% else %}{% url 'reader_dashboard' %}{% endif %}" class="text-decoration-none h-100">
+            {% else %}
+                <a href="{% url 'home' %}" class="text-decoration-none h-100">
+            {% endif %}
+                <div class="card h-100 p-3 border-0 shadow-sm rounded-4 transition-hover bg-dark text-white">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <span class="display-6 mb-3 d-block">💳</span>
+                            <h4 class="fw-bold mb-1 text-white">Total Issued Copies</h4>
+                            <p class="text-white-50 small mb-0">Review current operations data metrics tracking all combined materials circulating outside storage grids.</p>
+                        </div>
+                        <div class="text-end mt-4 pt-2 border-top border-secondary">
+                            <span class="fs-2 fw-bold text-warning font-monospace">{{ total_issued_copies }}</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            {% if user.is_authenticated %}
+                <a href="{% if user.is_librarian %}{% url 'librarian_dashboard' %}{% else %}{% url 'reader_dashboard' %}{% endif %}" class="text-decoration-none h-100">
+                    <div class="card h-100 p-3 border-0 shadow-sm rounded-4 transition-hover text-white" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div>
+                                <span class="display-6 mb-3 d-block">⚡</span>
+                                <h4 class="fw-bold mb-1 text-white">Your Workspace</h4>
+                                <p class="text-white-50 small mb-0">Fast-track direct entry routes straight back into your customized dashboard control panel layouts seamlessly.</p>
+                            </div>
+                            <div class="text-start mt-4 pt-2 border-top border-opacity-25 border-white">
+                                <span class="small fw-bold text-white d-block">Logged in as @{{ user.username }}</span>
+                                <span class="text-white-50 extra-small">Go to Console Dashboard →</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="text-decoration-none h-100">
+                    <div class="card h-100 p-3 border-0 shadow-sm rounded-4 transition-hover text-white" style="background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div>
+                                <span class="display-6 mb-3 d-block">🔒</span>
+                                <h4 class="fw-bold mb-1 text-white">Join Account Portal</h4>
+                                <p class="text-white-100 small mb-0">Sign in securely or create a new library profile membership tier to start requesting books.</p>
+                            </div>
+                            <div class="text-end mt-4 pt-2 border-top border-opacity-25 border-white">
+                                <span class="small fw-bold text-white d-block">Authorization Required</span>
+                                <span class="text-white-50 extra-small">Login / Register Profile →</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="collapse {% if page_obj.number > 1 or request.GET.q %}show{% endif %} mb-5" id="homeCatalogPanel">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 g-3">
+                <div class="d-flex align-items-center gap-2">
+                    <h4 class="fw-bold text-dark mb-0">Global Library Archives</h4>
+                    <span class="badge bg-light text-dark border">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+                </div>
+                
+                <div style="max-width: 360px; width: 100%;">
+                    <form method="get" action="{% url 'home' %}" class="d-flex m-0">
+                        <div class="input-group input-group-sm shadow-sm rounded-3 overflow-hidden">
+                            <input type="search" name="q" class="form-control border-0 bg-light" placeholder="Search by title, author, isbn..." value="{{ request.GET.q|default:'' }}">
+                            <button type="submit" class="btn btn-primary px-3">Search</button>
+                        </div>
+                    </form>
+                    {% if request.GET.q %}
+                        <a href="{% url 'home' %}" class="text-danger extra-small text-decoration-none mt-1 d-block" style="font-size:0.75rem;">✕ Clear Filters</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for book in object_list %}
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 bg-light bg-opacity-50 transition-hover d-flex flex-column">
+                            <div class="card-body p-4 d-flex flex-column h-100">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="fw-bold text-dark mb-0 text-truncate" style="max-width: 75%;" title="{{ book.title }}">
+                                        {{ book.title }}
+                                    </h5>
+                                    {% if book.available_copies > 0 %}
+                                        <span class="badge bg-success-subtle text-success px-2.5 py-1 rounded-pill small" style="font-size:0.7rem;">In Stock</span>
+                                    {% else %}
+                                        <span class="badge bg-danger-subtle text-danger px-2.5 py-1 rounded-pill small" style="font-size:0.7rem;">Out</span>
+                                    {% endif %}
+                                </div>
+                                <h6 class="text-muted small mb-3">By {{ book.author }}</h6>
+                                <p class="text-secondary small text-truncate-2 flex-grow-1 mb-4">
+                                    {{ book.description|default:"No description abstract provided for this catalog listing tracker record entry asset." }}
+                                </p>
+                                <div class="border-top pt-3 d-flex justify-content-between align-items-center mt-auto">
+                                    <span class="font-monospace text-muted extra-small" style="font-size:0.72rem;">ISBN: {{ book.isbn }}</span>
+                                    <a href="{% if user.is_authenticated %}{% url 'book_detail' book.id %}{% else %}{% url 'home' %}{% endif %}" class="btn btn-sm btn-outline-primary px-3 rounded-2 fw-semibold">Inspect Volume</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <span class="display-4 text-muted">📁</span>
+                        <h5 class="text-dark mt-3 fw-bold">No Records Met Search Rules</h5>
+                        <p class="text-muted small">Try optimizing your query parameters or view our complete default lists!</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% if is_paginated %}
+                <div class="d-flex justify-content-center border-top pt-4 mt-4">
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0 gap-1">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link border-0 rounded-2 bg-light text-dark" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">« Previous</a>
+                                </li>
+                            {% endif %}
+                            
+                            <li class="page-item disabled">
+                                <span class="page-link border-0 rounded-2 bg-primary text-white font-monospace px-3">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+                            </li>
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link border-0 rounded-2 bg-light text-dark" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next »</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

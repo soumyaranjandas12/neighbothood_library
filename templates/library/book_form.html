@@ -1,0 +1,31 @@
+{% extends 'library/base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h3>{% if form.instance.pk %}Update Record{% else %}Catalog New Asset{% endif %}</h3>
+                <hr>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label font-weight-bold">{{ field.label }}</label>
+                            {% if field.name != 'description' and field.name != 'published_date' %}
+                                <input type="{{ field.field.widget.input_type|default:'text' }}" name="{{ field.html_name }}" class="form-control {% if field.errors %}is-invalid{% endif %}" value="{{ field.value|default:'' }}">
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+                            {% if field.errors %}<div class="invalid-feedback">{{ field.errors.0 }}</div>{% endif %}
+                        </div>
+                    {% endfor %}
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success">Save Record</button>
+                        <a href="{% url 'librarian_dashboard' %}" class="btn btn-light border">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

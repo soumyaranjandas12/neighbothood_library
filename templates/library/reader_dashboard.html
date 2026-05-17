@@ -1,0 +1,204 @@
+{% extends 'library/base.html' %}
+{% block content %}
+
+<div class="container py-4">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row align-items-center mb-5">
+        <div class="col-md-12">
+            <h2 class="fw-bold text-dark mb-1">Welcome back, {{ request.user.username }}!</h2>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="card h-100 p-4 border-0 shadow-sm rounded-4 cursor-pointer transition-hover bg-white text-dark"
+                 data-bs-toggle="collapse"
+                 data-bs-target="#browseCatalogPanel"
+                 style="cursor: pointer;">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="display-5 mb-2 d-block">📖</span>
+                        <h4 class="fw-bold mb-1">Browse Library Collections</h4>
+                    </div>
+                    <div class="text-end">
+                        <span class="display-6 fw-bold text-primary font-monospace">{{ paginator.count }}</span>
+                        <span class="text-muted d-block small mt-1 fw-semibold">Available →</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 p-4 border-0 shadow-sm rounded-4 cursor-pointer transition-hover bg-dark text-white"
+                 data-bs-toggle="collapse"
+                 data-bs-target="#readerShelfPanel"
+                 style="cursor: pointer;">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="display-5 mb-2 d-block">📦</span>
+                        <h4 class="fw-bold mb-1 text-white">Your Reads</h4>
+                    </div>
+                    <div class="text-end">
+                        <span class="display-6 fw-bold text-warning font-monospace">{{ my_borrowings|length }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapse {% if page_obj.number > 1 or request.GET.q %}show{% endif %} mb-5" id="browseCatalogPanel">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 g-3">
+                <div class="d-flex align-items-center gap-2">
+                    <h4 class="fw-bold text-dark mb-0">Library Inventory Collections</h4>
+                    <span class="badge bg-light text-dark border">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+                </div>
+                <div style="max-width: 360px; width: 100%;">
+                    <form method="get" action="{% url 'reader_dashboard' %}" class="d-flex m-0">
+                        <div class="input-group input-group-sm shadow-sm rounded-3 overflow-hidden">
+                            <input type="search" name="q" class="form-control border-0" placeholder="Search by title, author, isbn..." value="{{ request.GET.q|default:'' }}">
+                            <button type="submit" class="btn btn-primary px-3">Search</button>
+                        </div>
+                    </form>
+                    {% if request.GET.q %}
+                        <a href="{% url 'reader_dashboard' %}" class="text-danger extra-small text-decoration-none mt-1 d-block" style="font-size:0.75rem;">✕ Clear Filters</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for book in object_list %}
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 bg-light bg-opacity-50 transition-hover d-flex flex-column">
+                            <div class="card-body p-4 d-flex flex-column h-100">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="fw-bold text-dark mb-0 text-truncate" style="max-width: 75%;" title="{{ book.title }}">
+                                        {{ book.title }}
+                                    </h5>
+                                    {% if book.available_copies > 0 %}
+                                        <span class="badge bg-success-subtle text-success px-2.5 py-1 rounded-pill small" style="font-size:0.7rem;">In Stock</span>
+                                    {% else %}
+                                        <span class="badge bg-danger-subtle text-danger px-2.5 py-1 rounded-pill small" style="font-size:0.7rem;">Out</span>
+                                    {% endif %}
+                                </div>
+                                <h6 class="text-muted small mb-3">By {{ book.author }}</h6>
+                                <p class="text-secondary small text-truncate-2 flex-grow-1 mb-4">
+                                    {{ book.description|default:"No description summary currently provided for this cataloged volume asset entry item." }}
+                                </p>
+                                <div class="border-top pt-3 d-flex justify-content-between align-items-center mt-auto">
+                                    <span class="font-monospace text-muted extra-small" style="font-size:0.72rem;">ISBN: {{ book.isbn }}</span>
+                                    <a href="{% url 'book_detail' book.id %}" class="btn btn-sm btn-outline-primary px-3 rounded-2 fw-semibold">View Info</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <span class="display-4 text-muted">📁</span>
+                        <h5 class="text-dark mt-3 fw-bold">No Matching Books Found</h5>
+                        <p class="text-muted small">We couldn't find any collection entries fitting your keyword. Try expanding your parameters!</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% if is_paginated %}
+                <div class="d-flex justify-content-center border-top pt-4 mt-4">
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0 gap-1">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link border-0 rounded-2 bg-light text-dark" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">« Previous</a>
+                                </li>
+                            {% endif %}
+
+                            <li class="page-item disabled">
+                                <span class="page-link border-0 rounded-2 bg-primary text-white font-monospace px-3">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+                            </li>
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link border-0 rounded-2 bg-light text-dark" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next »</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="collapse mb-5" id="readerShelfPanel">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+            <div class="p-4 bg-light border-bottom">
+                <h5 class="fw-bold text-dark mb-0">Your Checked-Out Asset Register</h5>
+            </div>
+
+            <div class="p-4">
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    {% for record in my_borrowings %}
+                        <div class="col">
+                            <div class="p-3 border rounded-4 bg-white shadow-sm transition-hover d-flex flex-column justify-content-between h-100">
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="fw-bold text-dark mb-0 text-truncate" style="max-width: 65%;">{{ record.book.title }}</h6>
+                                        {% if record.status == 'BORROWED' %}
+                                            <span class="badge bg-warning-subtle text-warning-dominant border border-warning border-opacity-25 font-monospace px-2.5 py-1 rounded-3" style="font-size:0.7rem; color: #b45309;">Due: {{ record.due_date }}</span>
+                                        {% else %}
+                                            <span class="badge bg-success-subtle text-success border border-success border-opacity-25 font-monospace px-2.5 py-1 rounded-3" style="font-size:0.7rem;">Returned</span>
+                                        {% endif %}
+                                    </div>
+                                    <p class="small text-muted mb-1">Author: {{ record.book.author }}</p>
+                                    <p class="extra-small text-muted font-monospace" style="font-size:0.72rem;">Loan Issued: {{ record.borrowed_date }}</p>
+                                </div>
+
+                                {% if record.status == 'BORROWED' %}
+                                <div class="d-flex justify-content-between align-items-center pt-2 border-top border-light mt-3">
+                                    {% if record.calculate_fine > 0 %}
+                                        <span class="text-danger small fw-bold animate-pulse">⚠️ Late Fine Owed: ${{ record.calculate_fine|floatformat:2 }}</span>
+                                    </td>
+                                    {% else %}
+                                        <span class="text-success small"><i class="bi bi-shield-check"></i> Within Term Window</span>
+                                    {% endif %}
+                                    <span class="text-muted extra-small italic" style="font-size:0.72rem;">Return via desk</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-12 text-center py-5 text-muted">
+                            <div class="fs-1 mb-2">📚</div>
+                            <p class="mb-0 small">No previous or live circulation activity logs mapped to this user account profile.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const catalogPanel = document.getElementById('browseCatalogPanel');
+        const shelfPanel = document.getElementById('readerShelfPanel');
+
+        catalogPanel.addEventListener('show.bs.collapse', function () {
+            const bsCollapse = bootstrap.Collapse.getInstance(shelfPanel);
+            if(bsCollapse) bsCollapse.hide();
+        });
+
+        shelfPanel.addEventListener('show.bs.collapse', function () {
+            const bsCollapse = bootstrap.Collapse.getInstance(catalogPanel);
+            if(bsCollapse) bsCollapse.hide();
+        });
+    });
+</script>
+
+{% endblock %}
