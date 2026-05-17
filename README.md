@@ -44,32 +44,35 @@ Make sure the following are installed on your system:
 ## Installation
 
 ### 1. Clone the Repository
->> git init
->> git clone https://github.com/soumyaranjandas12/neighbothood_library.git
+git init
+git clone https://github.com/soumyaranjandas12/neighbothood_library.git
 
 Rename the .env_sample file to .env and modify the configurations as needed.
 
 
 ### 2. Create a Virtual Environment
->> cd neighborhood_library
->> python -m venv venv
+cd neighborhood_library
+
+python -m venv venv
 
 
 ### 3. Activate the virtual environment
->> .\venv\Scripts\activate
+.\venv\Scripts\activate
 
 ### 4. Install the dependencies
 >> pip install -r requirements.txt
 
 ### 5. Migrate the database
->> python manage.py makemigrations
->> python manage.py migrate
+python manage.py makemigrations
+
+python manage.py migrate
 
 ### 6. Create Superuser
->> python manage.py createsuperuser
+python manage.py createsuperuser
 
 ### 7. Start the Application
->> python manage.py runserver
+python manage.py runserver
+
 
 Once started you can use the IP and port provided in the startup to use the webpage.
 Asper the sample screenshots below you get separate dashboards for both reader and librarian. Only Librarian can add, delete, update and issue and return books.
