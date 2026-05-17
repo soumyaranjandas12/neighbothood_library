@@ -90,6 +90,7 @@ class LibrarianDashboardView(LibrarianRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         # Add active active operations list tracking to the admin pane
         context['active_borrowings'] = BorrowRecord.objects.filter(status=BorrowRecord.StatusChoices.BORROWED)
+        context['borrow_history'] = BorrowRecord.objects.select_related('book', 'user').all()
         context['readers'] = User.objects.filter(role=User.Roles.READER).order_by('username')
         return context
 
