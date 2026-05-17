@@ -47,6 +47,8 @@ Make sure the following are installed on your system:
 >> git init
 >> git clone https://github.com/soumyaranjandas12/neighbothood_library.git
 
+Rename the .env_sample file to .env and modify the configurations as needed.
+
 
 ### 2. Create a Virtual Environment
 >> cd neighborhood_library
