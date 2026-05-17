@@ -14,6 +14,10 @@ class User(AbstractUser):
         choices=Roles.choices,
         default=Roles.READER
     )
+    full_name = models.CharField(max_length=255, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    address = models.TextField(blank=True)
+    contact_no = models.CharField(max_length=20, blank=True)
 
     @property
     def is_librarian(self):

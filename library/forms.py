@@ -8,7 +8,24 @@ class RegistrationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = UserCreationForm.Meta.fields + ('email', 'role',)
+        fields = UserCreationForm.Meta.fields + (
+            'email',
+            'full_name',
+            'date_of_birth',
+            'address',
+            'contact_no',
+            'role',
+        )
+        labels = {
+            'full_name': 'Full Name',
+            'date_of_birth': 'Date of Birth',
+            'address': 'Address',
+            'contact_no': 'Contact No.',
+        }
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+            'address': forms.Textarea(attrs={'rows': 3}),
+        }
 
 
 class BookForm(forms.ModelForm):

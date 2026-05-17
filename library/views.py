@@ -217,3 +217,22 @@ class CollectFineView(LibrarianRequiredMixin, View):
         record.save()
         messages.success(request, f"Payment Verified: Balance for user {record.user.username} settled cleanly.")
         return redirect('librarian_dashboard')
+
+
+class DeleteReaderView(LibrarianRequiredMixin, View):
+    """Allows librarians to delete reader accounts."""
+
+    def post(self, request, pk, *args, **kwargs):
+        reader = get_object_or_404(User, pk=pk, role=User.Roles.READER)
+
+        if BorrowRecord.objects.filter(user=reader, status=BorrowRecord.StatusChoices.BORROWED).exists():
+            messages.error(
+                request,
+                f"Cannot delete {reader.username}. This reader still has active borrowed books."
+            )
+            return redirect('librarian_dashboard')
+
+        username = reader.username
+        reader.delete()
+        messages.success(request, f"Reader account '{username}' deleted successfully.")
+        return redirect('librarian_dashboard')

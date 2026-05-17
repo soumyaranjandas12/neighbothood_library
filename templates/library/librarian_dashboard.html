@@ -1,221 +1,336 @@
 {% extends 'library/base.html' %}
 {% block content %}
 
-<div class="container py-4">
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
-
-    <div class="row align-items-center mb-5">
-        <div class="col-md-8">
-            <h2 class="fw-bold text-dark mb-1">Librarian Dashboard</h2>
-        </div>
-        <div class="col-md-4 text-md-end mt-3 mt-md-0">
-            <a href="{% url 'book_create' %}" class="btn btn-outline-dark shadow-sm px-4 py-2 rounded-3">Add New Book</a>
-        </div>
-    </div>
-
-    <div class="row g-4 mb-5">
-        <div class="col-md-6">
-            <div class="card h-100 p-4 border-0 shadow-sm rounded-4 cursor-pointer transition-hover bg-white text-dark"
-                 data-bs-toggle="collapse"
-                 data-bs-target="#catalogDetailPanel"
-                 style="cursor: pointer;">
-                <div class="card-body d-flex align-items-center justify-content-between">
-                    <div>
-                        <span class="display-5 mb-2 d-block">📚</span>
-                        <h4 class="fw-bold mb-1">Browse All Books</h4>
-                        <p class="text-muted small mb-0">Browse collection stacks, search titles, and issue asset copies.</p>
-                    </div>
-                    <div class="text-end">
-                        <span class="display-6 fw-bold text-primary font-monospace">{{ paginator.count }}</span>
-                        <span class="text-muted d-block small mt-1 fw-semibold">Total Titles →</span>
-                    </div>
+    <div class="container py-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row align-items-center mb-5">
+            <div class="col-md-8">
+                <h2 class="fw-bold text-dark mb-1">Librarian Dashboard</h2>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="{% url 'book_create' %}" class="btn btn-outline-dark shadow-sm px-4 py-2 rounded-3">Add New
+                    Book</a>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="card h-100 p-4 border-0 shadow-sm rounded-4 cursor-pointer transition-hover bg-dark text-white"
-                 data-bs-toggle="collapse"
-                 data-bs-target="#circulationDetailPanel"
-                 style="cursor: pointer;">
-                <div class="card-body d-flex align-items-center justify-content-between">
-                    <div>
-                        <span class="display-5 mb-2 d-block">💳</span>
-                        <h4 class="fw-bold mb-1 text-white">Active Issued Logs</h4>
-                    </div>
-                    <div class="text-end">
-                        <span class="display-6 fw-bold text-warning font-monospace">{{ active_borrowings|length }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="collapse {% if page_obj.number > 1 or request.GET.q %}show{% endif %} mb-5" id="catalogDetailPanel">
-        <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-            <div class="p-4 bg-light border-bottom d-flex flex-wrap align-items-center justify-content-between g-3">
-                <div class="d-flex align-items-center gap-2">
-                    <h5 class="fw-bold text-dark mb-0">Catalog Inventory Matrix</h5>
-                    <span class="badge bg-primary rounded-pill">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
-                </div>
-
-                <div style="max-width: 380px; width: 100%;">
-                    <form method="get" action="{% url 'librarian_dashboard' %}" class="d-flex m-0">
-                        <div class="input-group input-group-sm shadow-sm rounded-3 overflow-hidden">
-                            <input type="search" name="q" class="form-control border-0" placeholder="Filter title, author, ISBN..." value="{{ request.GET.q|default:'' }}">
-                            <button type="submit" class="btn btn-dark px-3">Search</button>
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card h-100 p-4 border-0 shadow-sm rounded-4 cursor-pointer transition-hover bg-white text-dark"
+                     data-bs-toggle="collapse"
+                     data-bs-target="#catalogDetailPanel"
+                     style="cursor: pointer;">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="display-5 mb-2 d-block">📚</span>
+                            <h4 class="fw-bold mb-1">Browse All Books</h4>
+                            <p class="text-muted small mb-0">Browse collection, search titles, and issue copies.</p>
                         </div>
-                    </form>
-                    {% if request.GET.q %}
-                        <a href="{% url 'librarian_dashboard' %}" class="text-danger extra-small text-decoration-none mt-1 d-block" style="font-size:0.75rem;">✕ Clear Filters</a>
-                    {% endif %}
+                        <div class="text-end">
+                            <span class="display-6 fw-bold text-primary font-monospace">{{ paginator.count }}</span>
+                            <span class="text-muted d-block small mt-1 fw-semibold">Total</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light text-secondary small text-uppercase" style="font-size: 0.75rem;">
+            <div class="col-md-4">
+                <div class="card h-100 p-4 border-0 shadow-sm rounded-4 cursor-pointer transition-hover bg-dark text-white"
+                     data-bs-toggle="collapse"
+                     data-bs-target="#circulationDetailPanel"
+                     style="cursor: pointer;">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="display-5 mb-2 d-block">💳</span>
+                            <h4 class="fw-bold mb-1 text-white">Active Issued Logs</h4>
+                        </div>
+                        <div class="text-end">
+                            <span class="display-6 fw-bold text-warning font-monospace">{{ active_borrowings|length }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 p-4 border-0 shadow-sm rounded-4 cursor-pointer transition-hover bg-primary text-white"
+                     data-bs-toggle="collapse"
+                     data-bs-target="#readerDetailPanel"
+                     style="cursor: pointer;">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="display-5 mb-2 d-block">👥</span>
+                            <h4 class="fw-bold mb-1 text-white">Reader Details</h4>
+                            <p class="text-white-50 small mb-0">View registered reader profiles.</p>
+                        </div>
+                        <div class="text-end">
+                            <span class="display-6 fw-bold text-warning font-monospace">{{ readers|length }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="collapse {% if page_obj.number > 1 or request.GET.q %}show{% endif %} mb-5" id="catalogDetailPanel">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+                <div class="p-4 bg-light border-bottom d-flex flex-wrap align-items-center justify-content-between g-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <h5 class="fw-bold text-dark mb-0">Catalog Inventory Matrix</h5>
+                        <span class="badge bg-primary rounded-pill">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+                    </div>
+
+                    <div style="max-width: 380px; width: 100%;">
+                        <form method="get" action="{% url 'librarian_dashboard' %}" class="d-flex m-0">
+                            <div class="input-group input-group-sm shadow-sm rounded-3 overflow-hidden">
+                                <input type="search" name="q" class="form-control border-0"
+                                       placeholder="Filter title, author, ISBN..."
+                                       value="{{ request.GET.q|default:'' }}">
+                                <button type="submit" class="btn btn-dark px-3">Search</button>
+                            </div>
+                        </form>
+                        {% if request.GET.q %}
+                            <a href="{% url 'librarian_dashboard' %}"
+                               class="text-danger extra-small text-decoration-none mt-1 d-block"
+                               style="font-size:0.75rem;">✕ Clear Filters</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-secondary small text-uppercase" style="font-size: 0.75rem;">
                         <tr>
                             <th class="ps-4">Book Blueprint Meta</th>
                             <th>Stock Metrics</th>
                             <th class="pe-4 text-end">Dispatch Copy Assignment</th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         {% for book in object_list %}
-                        <tr>
-                            <td class="ps-4 py-3">
-                                <div class="fw-bold text-dark text-truncate" style="max-width: 280px;">{{ book.title }}</div>
-                                <div class="text-muted small">By {{ book.author }} <span class="mx-1">•</span> ISBN: <span class="font-monospace">{{ book.isbn }}</span></div>
-                            </td>
-                            <td>
-                                {% if book.available_copies > 0 %}
-                                    <span class="badge bg-success-subtle text-success px-2.5 py-1.5 rounded-pill">{{ book.available_copies }} In Stock</span>
-                                {% else %}
-                                    <span class="badge bg-danger-subtle text-danger px-2.5 py-1.5 rounded-pill">Out of Stock</span>
-                                {% endif %}
-                                <div class="text-muted mt-1 extra-small" style="font-size: 0.72rem;">Total Allocation: {{ book.total_copies }}</div>
-                            </td>
-                            <td class="pe-4 text-end">
-                                {% if book.available_copies > 0 %}
-                                    <form action="{% url 'issue_book' %}" method="post" class="d-flex justify-content-end align-items-center gap-2">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="book_id" value="{{ book.id }}">
-                                        <select name="username" class="form-select form-select-sm border-0 bg-light shadow-sm" required style="width: 160px;">
-                                            <option value="" disabled selected>Assign reader...</option>
-                                            {% for reader in readers %}
-                                                <option value="{{ reader.username }}">{{ reader.username }}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <button type="submit" class="btn btn-sm btn-outline-success px-3 rounded-2 shadow-sm">Issue</button>
-                                    </form>
-                                {% else %}
-                                    <span class="text-muted small italic">Unavailable</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="3" class="text-center py-4 text-muted">No entries matched your search parameters.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            {% if is_paginated %}
-                <div class="card-footer bg-white border-top py-3 d-flex justify-content-center">
-                    <nav>
-                        <ul class="pagination pagination-sm mb-0 gap-1">
-                            {% if page_obj.has_previous %}
-                                <li class="page-item">
-                                    <a class="page-link border-0 rounded-2 bg-light text-dark" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">« Previous</a>
-                                </li>
-                            {% endif %}
-
-                            <li class="page-item disabled">
-                                <span class="page-link border-0 rounded-2 bg-dark text-white font-monospace px-3">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
-                            </li>
-
-                            {% if page_obj.has_next %}
-                                <li class="page-item">
-                                    <a class="page-link border-0 rounded-2 bg-light text-dark" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next »</a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                </div>
-            {% endif %}
-        </div>
-    </div>
-
-    <div class="collapse mb-5" id="circulationDetailPanel">
-        <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-            <div class="p-4 bg-light border-bottom">
-                <h5 class="fw-bold text-dark mb-0">Active Loans Audit Trail</h5>
-            </div>
-
-            <div class="p-4">
-                <div class="row row-cols-1 row-cols-md-2 g-4">
-                    {% for record in active_borrowings %}
-                        <div class="col">
-                            <div class="p-3 border rounded-4 bg-white shadow-sm transition-hover d-flex flex-column justify-content-between h-100">
-                                <div>
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <h6 class="fw-bold text-dark mb-0 text-truncate" style="max-width: 70%;">{{ record.book.title }}</h6>
-                                        <span class="badge bg-danger-subtle text-danger font-monospace" style="font-size: 0.72rem;">Due: {{ record.due_date }}</span>
-                                    </div>
-                                    <p class="small text-muted mb-3">Possession Assignee: <strong class="text-dark">@{{ record.user.username }}</strong></p>
-                                </div>
-
-                                <div class="d-flex justify-content-between align-items-center pt-2 border-top border-light mt-auto">
-                                    {% if record.calculate_fine > 0 %}
-                                        <span class="text-danger small fw-bold">⚠️ Arrears Due: ${{ record.calculate_fine|floatformat:2 }}</span>
+                            <tr>
+                                <td class="ps-4 py-3">
+                                    <div class="fw-bold text-dark text-truncate"
+                                         style="max-width: 280px;">{{ book.title }}</div>
+                                    <div class="text-muted small">By {{ book.author }} <span class="mx-1">•</span> ISBN:
+                                        <span class="font-monospace">{{ book.isbn }}</span></div>
+                                </td>
+                                <td>
+                                    {% if book.available_copies > 0 %}
+                                        <span class="badge bg-success-subtle text-success px-2.5 py-1.5 rounded-pill">{{ book.available_copies }} In Stock</span>
                                     {% else %}
-                                        <span class="text-success small">✓ Within Safe Term</span>
+                                        <span class="badge bg-danger-subtle text-danger px-2.5 py-1.5 rounded-pill">Out of Stock</span>
                                     {% endif %}
+                                    <div class="text-muted mt-1 extra-small" style="font-size: 0.72rem;">Total
+                                        Allocation: {{ book.total_copies }}</div>
+                                </td>
+                                <td class="pe-4 text-end">
+                                    {% if book.available_copies > 0 %}
+                                        <form action="{% url 'issue_book' %}" method="post"
+                                              class="d-flex justify-content-end align-items-center gap-2">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="book_id" value="{{ book.id }}">
+                                            <select name="username"
+                                                    class="form-select form-select-sm border-0 bg-light shadow-sm"
+                                                    required style="width: 160px;">
+                                                <option value="" disabled selected>Assign reader...</option>
+                                                {% for reader in readers %}
+                                                    <option value="{{ reader.username }}">{{ reader.username }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-success px-3 rounded-2 shadow-sm">
+                                                Issue
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <span class="text-muted small italic">Unavailable</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center py-4 text-muted">No entries matched your search
+                                    parameters.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
-                                    <form action="{% url 'return_book' record.id %}" method="post" class="m-0">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-xs btn-outline-dark px-3 py-1.5 fw-bold">Process Return Intake</button>
-                                    </form>
+                {% if is_paginated %}
+                    <div class="card-footer bg-white border-top py-3 d-flex justify-content-center">
+                        <nav>
+                            <ul class="pagination pagination-sm mb-0 gap-1">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link border-0 rounded-2 bg-light text-dark" href="?page=
+
+
+                                                {{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">«
+                                            Previous</a>
+                                    </li>
+                                {% endif %}
+
+                                <li class="page-item disabled">
+                                    <span class="page-link border-0 rounded-2 bg-dark text-white font-monospace px-3">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+                                </li>
+
+                                {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link border-0 rounded-2 bg-light text-dark" href="?page=
+
+
+                                                {{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next
+                                            »</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="collapse mb-5" id="circulationDetailPanel">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+                <div class="p-4 bg-light border-bottom">
+                    <h5 class="fw-bold text-dark mb-0">Active Loans Audit Trail</h5>
+                </div>
+
+                <div class="p-4">
+                    <div class="row row-cols-1 row-cols-md-2 g-4">
+                        {% for record in active_borrowings %}
+                            <div class="col">
+                                <div class="p-3 border rounded-4 bg-white shadow-sm transition-hover d-flex flex-column justify-content-between h-100">
+                                    <div>
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h6 class="fw-bold text-dark mb-0 text-truncate"
+                                                style="max-width: 70%;">{{ record.book.title }}</h6>
+                                            <span class="badge bg-danger-subtle text-danger font-monospace"
+                                                  style="font-size: 0.72rem;">Due: {{ record.due_date }}</span>
+                                        </div>
+                                        <p class="small text-muted mb-3">Possession Assignee: <strong class="text-dark">@{{ record.user.username }}</strong>
+                                        </p>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center pt-2 border-top border-light mt-auto">
+                                        {% if record.calculate_fine > 0 %}
+                                            <span class="text-danger small fw-bold">⚠️ Arrears Due: ${{ record.calculate_fine|floatformat:2 }}</span>
+                                        {% else %}
+                                            <span class="text-success small">✓ Within Safe Term</span>
+                                        {% endif %}
+
+                                        <form action="{% url 'return_book' record.id %}" method="post" class="m-0">
+                                            {% csrf_token %}
+                                            <button type="submit"
+                                                    class="btn btn-xs btn-outline-dark px-3 py-1.5 fw-bold">Process
+                                                Return Intake
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% empty %}
-                        <div class="col-12 text-center py-5 text-muted">
-                            <div class="fs-2 mb-2">📦</div>
-                            <p class="mb-0">All outstanding assets have been safely returned to inventory stacks.</p>
-                        </div>
-                    {% endfor %}
+                        {% empty %}
+                            <div class="col-12 text-center py-5 text-muted">
+                                <div class="fs-2 mb-2">📦</div>
+                                <p class="mb-0">All outstanding assets have been safely returned to inventory
+                                    stacks.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="collapse mb-5" id="readerDetailPanel">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+                <div class="p-4 bg-light border-bottom">
+                    <h5 class="fw-bold text-dark mb-0">Registered Reader Details</h5>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-secondary small text-uppercase" style="font-size: 0.75rem;">
+                        <tr>
+                            <th class="ps-4">Name</th>
+                            <th>Username</th>
+                            <th>Date of Birth</th>
+                            <th>Contact No.</th>
+                            <th class="pe-4">Address</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for reader in readers %}
+                            <tr>
+                                <td class="ps-4 py-3">
+                                    <div class="fw-bold text-dark">
+                                        {{ reader.full_name|default:"Not provided" }}
+                                    </div>
+                                    <div class="text-muted small">{{ reader.email|default:"No email" }}</div>
+                                </td>
+                                <td>
+                                    <span class="font-monospace">@{{ reader.username }}</span>
+                                </td>
+                                <td>
+                                    {{ reader.date_of_birth|date:"M d, Y"|default:"Not provided" }}
+                                </td>
+                                <td>
+                                    {{ reader.contact_no|default:"Not provided" }}
+                                </td>
+                                <td class="pe-4">
+                                    {{ reader.address|default:"Not provided" }}
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <form action="{% url 'delete_reader' reader.id %}" method="post" class="m-0"
+                                          onsubmit="return confirm('Are you sure you want to delete this reader?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-2">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">
+                                    No registered readers found.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const catalogPanel = document.getElementById('catalogDetailPanel');
-        const circulationPanel = document.getElementById('circulationDetailPanel');
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const catalogPanel = document.getElementById('catalogDetailPanel');
+            const circulationPanel = document.getElementById('circulationDetailPanel');
+            const readerPanel = document.getElementById('readerDetailPanel');
 
-        catalogPanel.addEventListener('show.bs.collapse', function () {
-            const bsCollapse = bootstrap.Collapse.getInstance(circulationPanel);
-            if(bsCollapse) bsCollapse.hide();
+            const panels = [catalogPanel, circulationPanel, readerPanel];
+
+            panels.forEach(function (panel) {
+                panel.addEventListener('show.bs.collapse', function () {
+                    panels.forEach(function (otherPanel) {
+                        if (otherPanel !== panel) {
+                            const bsCollapse = bootstrap.Collapse.getInstance(otherPanel);
+                            if (bsCollapse) {
+                                bsCollapse.hide();
+                            }
+                        }
+                    });
+                });
+            });
         });
-
-        circulationPanel.addEventListener('show.bs.collapse', function () {
-            const bsCollapse = bootstrap.Collapse.getInstance(catalogPanel);
-            if(bsCollapse) bsCollapse.hide();
-        });
-    });
-</script>
+    </script>
 
 {% endblock %}

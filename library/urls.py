@@ -11,6 +11,9 @@ urlpatterns = [
     path('dashboard/librarian/', views.LibrarianDashboardView.as_view(), name='librarian_dashboard'),
     path('dashboard/reader/', views.ReaderDashboardView.as_view(), name='reader_dashboard'),
 
+    # User Actions
+    path('reader/<int:pk>/delete/', views.DeleteReaderView.as_view(), name='delete_reader'),
+
     # Book Actions
     path('book/new/', views.BookCreateView.as_view(), name='book_create'),
     path('book/<int:pk>/', views.BookDetailView.as_view(), name='book_detail'),
