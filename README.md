@@ -73,11 +73,16 @@ Once started you can use the IP and port provided in the startup to use the webp
 Asper the sample screenshots below you get separate dashboards for both reader and librarian. Only Librarian can add, delete, update and issue and return books.
 In the reader dashborad,the reader can view all the books with the available copies and there is also one tab to tell the user the books that has been issue to him/her.
 
-<img width="1863" height="957" alt="image" src="https://github.com/user-attachments/assets/ae652fbb-cb2f-419a-98a5-643fe15a0e4a" />
-<img width="1712" height="892" alt="image" src="https://github.com/user-attachments/assets/e72f7080-ea8b-4b55-be93-3e626a787322" />
-<img width="1716" height="872" alt="image" src="https://github.com/user-attachments/assets/8a877f42-7525-4c7c-a0ef-26fd779bd238" />
-<img width="1822" height="895" alt="image" src="https://github.com/user-attachments/assets/bdbc77df-0023-42e5-b034-8788bc6b757e" />
-<img width="1732" height="930" alt="image" src="https://github.com/user-attachments/assets/4f4688bb-195f-45ee-bee6-5f38e95f10b6" />
+<img width="1821" height="776" alt="image" src="https://github.com/user-attachments/assets/eb6e511d-7870-493d-9826-87bdf4ce60bf" />
+<img width="1706" height="792" alt="image" src="https://github.com/user-attachments/assets/21ee0e68-82b6-4ea1-b637-0a5f68a44ebb" />
+<img width="1737" height="875" alt="image" src="https://github.com/user-attachments/assets/2f5a2564-0e64-46a6-93f4-d09947efbdfa" />
+<img width="1742" height="857" alt="image" src="https://github.com/user-attachments/assets/4bad4c18-df50-4798-b3da-800e882da376" />
+<img width="1713" height="911" alt="image" src="https://github.com/user-attachments/assets/80b68aaa-f964-4c38-be03-c4aaeae81084" />
+
+
+
+
+
 
 
 
