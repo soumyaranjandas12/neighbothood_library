@@ -37,7 +37,7 @@ text neighborhood_library/ ├── library/ │ ├── migrations/ │ ├�
 Make sure the following are installed on your system:
 
 - Python 3.10 or higher
-- PostgreSQL
+- PostgreSQL is install and database 'library_databse' is created.
 - pip
 - virtualenv
 
