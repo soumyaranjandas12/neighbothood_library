@@ -62,10 +62,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'library_project.wsgi.application'
 # Explicitly allow local React dev environment requests to come through
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', "http://localhost:5173,http://127.0.0.1:5173").split(',')
 
 # Allow credentials if you plan to use Django session cookies for authorization
 CORS_ALLOW_CREDENTIALS = True
@@ -75,12 +72,12 @@ CORS_ALLOW_CREDENTIALS = True
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'library_database',      # The name of the database you created in Postgres
-        'USER': 'postgres',  # Default is often 'postgres'
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',         # Or the IP address of your database server
-        'PORT': '5432',              # Default PostgreSQL port is 5432
+        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.environ.get('DB_NAME','library_database'),     # The name of the database you created in Postgres
+        'USER': os.environ.get('DB_USER','postgres'),  # Default is often 'postgres'
+        'PASSWORD': os.environ.get('DB_PASSWORD','postgres'),
+        'HOST': os.environ.get('DB_HOST','localhost'),          # Or the IP address of your database server
+        'PORT': os.environ.get('DB_PORT','5432'),              # Default PostgreSQL port is 5432
     }
 }
 
@@ -107,9 +104,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'reader_dashboard'
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = os.environ.get('LOGIN_URL', 'login')
+LOGIN_REDIRECT_URL = os.environ.get('LOGIN_REDIRECT_URL', 'reader_dashboard')
+LOGOUT_REDIRECT_URL = os.environ.get('LOGOUT_REDIRECT_URL', 'login')
 
 LANGUAGE_CODE = 'en-us'
 
@@ -123,8 +120,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_URL = os.environ.get('STATIC_URL', 'static/')
+STATIC_ROOT = BASE_DIR / os.environ.get('STATIC_ROOT', 'staticfiles')
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
