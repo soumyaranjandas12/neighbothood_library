@@ -60,7 +60,7 @@ python -m venv venv
 .\venv\Scripts\activate
 
 ### 4. Install the dependencies
->> pip install -r requirements.txt
+pip install -r requirements.txt
 
 ### 5. Migrate the database
 python manage.py makemigrations
